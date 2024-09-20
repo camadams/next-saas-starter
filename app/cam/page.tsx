@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef, useState, useEffect } from "react";
 // import { llmWork } from "../aiactions";
 
@@ -59,8 +60,8 @@ const CameraCapture = () => {
       {photo && (
         <div>
           <h3>Captured Photo:</h3>
-          {/* <img src={photo} alt="Captured" /> */}
-          {/* <p>{photo}</p> */}
+          <Image width={100} height={100} src={photo} alt="Captured" />
+          <p>{photo}</p>
           <button onClick={handleSendClick} disabled={waitingForApiResponse}>
             {waitingForApiResponse ? "Loading..." : "Send"}
           </button>
