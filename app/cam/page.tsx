@@ -13,8 +13,17 @@ const CameraCapture = () => {
     useState<boolean>(false);
 
   useEffect(() => {
+    const constraints = {
+      video: {
+        facingMode: { exact: "environment" }, // "user" for front camera, "environment" for back camera
+      },
+    };
     navigator.mediaDevices
-      .getUserMedia({ video: true })
+      .getUserMedia({
+        video: {
+          facingMode: { exact: "environment" }, // "user" for front camera, "environment" for back camera
+        },
+      })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -39,10 +48,9 @@ const CameraCapture = () => {
   const handleSendClick = async () => {
     setWaitingForApiResponse(true);
     // const resp = await llmWork(photo!);
-    console.log("resp")
+    console.log("resp");
 
     setWaitingForApiResponse(false);
-
   };
   return (
     <div>
