@@ -7,17 +7,12 @@ import { useRef, useState, useEffect } from "react";
 const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isCapturing, setIsCapturing] = useState(false);
   const [photo, setPhoto] = useState<string | null>(null);
   const [waitingForApiResponse, setWaitingForApiResponse] =
     useState<boolean>(false);
 
   useEffect(() => {
-    const constraints = {
-      video: {
-        facingMode: { exact: "environment" }, // "user" for front camera, "environment" for back camera
-      },
-    };
+
     navigator.mediaDevices
       .getUserMedia({
         video: {
@@ -54,9 +49,8 @@ const CameraCapture = () => {
   };
   return (
     <div>
-      <button onClick={() => setIsCapturing(true)}>Start Camera</button>
-      <div style={{ display: isCapturing ? "block" : "none" }}>
-        <video ref={videoRef} width="640" height="480" autoPlay />
+      <div>
+        <video ref={videoRef} width="640" height="480" autoPlay playsInline/>
         <canvas
           ref={canvasRef}
           width="640"
