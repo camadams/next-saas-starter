@@ -5,6 +5,7 @@ import {
   text,
   timestamp,
   integer,
+  real
 } from 'drizzle-orm/pg-core';
 import { relations } from 'drizzle-orm';
 
@@ -74,7 +75,7 @@ export const spendingTable = pgTable("spending", {
   date: timestamp("date", { mode: "date" }).notNull(),
   description: text("description").notNull(),
   category: text("category"),
-  price: integer("price").notNull(),
+  price: real("price").notNull(),
 });
 
 export const categoryTable = pgTable("category", {

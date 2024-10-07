@@ -1,7 +1,7 @@
 "use client";
 
 import { llmWork } from "@/lib/aiactions";
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, ChangeEvent } from "react";
 
 const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -24,14 +24,15 @@ const CameraCapture = () => {
       });
   }, []);
 
-  const capturePhoto = () => {
-    if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext("2d");
-      if (context) {
-        context.drawImage(videoRef.current, 0, 0, 640, 480);
-        setPhoto(canvasRef.current.toDataURL("image/png"));
-        // You can now send the photo data (base64) to your backend
-      }
+  const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        console.log(e.target?.result);
+        setPhoto(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -58,31 +59,34 @@ const CameraCapture = () => {
   return (
     <div>
       <div>
-        <video ref={videoRef} width="640" height="480" autoPlay />
         <input
           type="file"
           id="cameraInput"
           accept="image/*"
           capture="environment"
+          onChange={handleFileInputChange}
         />{" "}
-        <canvas
+        {/* <canvas
           ref={canvasRef}
           width="640"
           height="480"
           style={{ display: "none" }}
-        />
-        <button onClick={capturePhoto}>Capture Photo</button>
+        /> */}
+        <button onClick={handleSendClick} disabled={waitingForApiResponse}>
+          {waitingForApiResponse ? "Loading..." : "Send"}
+        </button>
       </div>
+      
       {photo && (
         <div>
           <h3>Captured Photo:</h3>
-          <img src={photo} alt="Captured" />
-          {/* <p>{photo}</p> */}
+          <img src={photo} alt="Captured" style={{ maxWidth: '100%', height: 'auto' }} />
           <button onClick={handleSendClick} disabled={waitingForApiResponse}>
             {waitingForApiResponse ? "Loading..." : "Send"}
           </button>
         </div>
       )}
+
       {modalIsOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
