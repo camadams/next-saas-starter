@@ -38,21 +38,26 @@ const CameraCapture = () => {
     setWaitingForApiResponse(true);
     const resp = await llmWork(photo!);
     alert(resp);
-    console.log(resp)
+    console.log(resp);
 
     setWaitingForApiResponse(false);
-
   };
   return (
     <div>
-      <div >
-        <video ref={videoRef} width="640" height="480" autoPlay />
-        <input type="file" id="cameraInput" accept="image/*" capture="environment"/>        <canvas
+      <div>
+        {/* <video ref={videoRef} width="640" height="480" autoPlay /> */}
+        <input
+          type="file"
+          id="cameraInput"
+          accept="image/*"
+          capture="user"
+        />{" "}
+        {/* <canvas
           ref={canvasRef}
           width="640"
           height="480"
           style={{ display: "none" }}
-        />
+        /> */}
         <button onClick={capturePhoto}>Capture Photo</button>
       </div>
       {photo && (
