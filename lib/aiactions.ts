@@ -17,7 +17,9 @@ export async function llmWork(photo: string) {
     photo = testPhoto;
   }
 
-  photo = photo.split(",")[1];
+  // Extract the base64 data and determine the correct media type
+  const [header, base64Data] = photo.split(",");
+  const mediaType = header.match(/data:(.*);base64/)?.[1] || "image/png";
 
   let parsedResponse : Spending;
 
@@ -42,8 +44,8 @@ export async function llmWork(photo: string) {
               type: "image",
               source: {
                 type: "base64",
-                media_type: "image/png",
-                data: photo,
+                media_type: mediaType,
+                data: base64Data,
               },
             },
           ],
