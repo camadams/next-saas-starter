@@ -13,7 +13,6 @@ export async function llmWork(photo: string) {
   });
 
   if (false /*process.env.NODE_ENV == "development"*/) {
-
     photo = testPhoto;
   }
 
