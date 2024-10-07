@@ -68,6 +68,22 @@ export const invitations = pgTable('invitations', {
   status: varchar('status', { length: 20 }).notNull().default('pending'),
 });
 
+
+export const spendingTable = pgTable("spending", {
+  id: serial('id').primaryKey(),
+  date: timestamp("date", { mode: "date" }).notNull(),
+  description: text("description").notNull(),
+  category: text("category"),
+  price: integer("price").notNull(),
+});
+
+export const categoryTable = pgTable("category", {
+  id: serial('id').primaryKey(),
+  name: text("name").notNull(),
+  color: text("color").notNull(),
+  createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+});
+
 export const teamsRelations = relations(teams, ({ many }) => ({
   teamMembers: many(teamMembers),
   activityLogs: many(activityLogs),
@@ -127,6 +143,8 @@ export type TeamDataWithMembers = Team & {
     user: Pick<User, 'id' | 'name' | 'email'>;
   })[];
 };
+export type Spending = typeof spendingTable.$inferInsert;
+export type Category = typeof categoryTable.$inferInsert;
 
 export enum ActivityType {
   SIGN_UP = 'SIGN_UP',

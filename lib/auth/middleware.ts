@@ -59,7 +59,7 @@ type ActionWithTeamFunction<T> = (
 ) => Promise<T>;
 
 export function withTeam<T>(action: ActionWithTeamFunction<T>) {
-  return async (formData: FormData): Promise<T> => {
+  return async function (formData: FormData): Promise<T> {
     const user = await getUser();
     if (!user) {
       redirect('/sign-in');
