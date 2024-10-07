@@ -45,19 +45,19 @@ const CameraCapture = () => {
   return (
     <div>
       <div>
-        {/* <video ref={videoRef} width="640" height="480" autoPlay /> */}
+        <video ref={videoRef} width="640" height="480" autoPlay />
         <input
           type="file"
           id="cameraInput"
           accept="image/*"
           capture="user"
         />{" "}
-        {/* <canvas
+        <canvas
           ref={canvasRef}
           width="640"
           height="480"
           style={{ display: "none" }}
-        /> */}
+        />
         <button onClick={capturePhoto}>Capture Photo</button>
       </div>
       {photo && (
