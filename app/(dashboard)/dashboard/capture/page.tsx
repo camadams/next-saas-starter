@@ -7,12 +7,13 @@ const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [photo, setPhoto] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [waitingForApiResponse, setWaitingForApiResponse] = useState<boolean>(false);
+  const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<string | null>(null);
 
   useEffect(() => {
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
+      .getUserMedia({ video: true })
       .then((stream) => {
         if (videoRef.current) {
           videoRef.current.srcObject = stream;
@@ -27,71 +28,78 @@ const CameraCapture = () => {
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext("2d");
       if (context) {
-        context.drawImage(videoRef.current, 0, 0, window.innerWidth, window.innerHeight);
+        context.drawImage(videoRef.current, 0, 0, 640, 480);
         setPhoto(canvasRef.current.toDataURL("image/png"));
+        // You can now send the photo data (base64) to your backend
       }
     }
   };
 
   const handleSendClick = async () => {
-    setIsLoading(true);
+    setWaitingForApiResponse(true);
+    setModalIsOpen(true);
     try {
       const resp = await llmWork(photo!);
       setApiResponse(JSON.stringify(resp));
+      console.log(resp);
     } catch (error) {
-      console.error("Error processing image:", error);
+      console.error("Error in API call:", error);
       setApiResponse("An error occurred while processing the image.");
     } finally {
-      setIsLoading(false);
+      setWaitingForApiResponse(false);
     }
   };
 
-  const resetCapture = () => {
-    setPhoto(null);
+  const closeModal = () => {
+    setModalIsOpen(false);
     setApiResponse(null);
   };
 
   return (
-    <div className="relative h-screen w-screen">
-      <video ref={videoRef} className="absolute inset-0 w-full h-full object-cover" autoPlay playsInline />
-      <canvas ref={canvasRef} className="hidden" />
-      
-      {!photo && (
-        <button
-          onClick={capturePhoto}
-          className="absolute bottom-8 left-1/2 transform -translate-x-1/2 bg-white text-black px-6 py-3 rounded-full shadow-lg font-semibold"
-        >
-          Take Photo
-        </button>
-      )}
-
-      {photo && !apiResponse && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-            <h3 className="text-xl font-semibold mb-4">Confirm Photo</h3>
-            <img src={photo} alt="Captured" className="w-full mb-4 rounded" />
-            <button
-              onClick={handleSendClick}
-              className="w-full bg-blue-500 text-white px-4 py-2 rounded font-semibold"
-              disabled={isLoading}
-            >
-              {isLoading ? "Processing..." : "Send"}
-            </button>
-          </div>
+    <div>
+      <div>
+        <video ref={videoRef} width="640" height="480" autoPlay />
+        <input
+          type="file"
+          id="cameraInput"
+          accept="image/*"
+          capture="environment"
+        />{" "}
+        <canvas
+          ref={canvasRef}
+          width="640"
+          height="480"
+          style={{ display: "none" }}
+        />
+        <button onClick={capturePhoto}>Capture Photo</button>
+      </div>
+      {photo && (
+        <div>
+          <h3>Captured Photo:</h3>
+          <img src={photo} alt="Captured" />
+          {/* <p>{photo}</p> */}
+          <button onClick={handleSendClick} disabled={waitingForApiResponse}>
+            {waitingForApiResponse ? "Loading..." : "Send"}
+          </button>
         </div>
       )}
-
-      {apiResponse && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full">
-            <h3 className="text-xl font-semibold mb-4">Result</h3>
-            <p className="mb-4">{apiResponse}</p>
-            <button
-              onClick={resetCapture}
-              className="w-full bg-green-500 text-white px-4 py-2 rounded font-semibold"
-            >
-              Done
-            </button>
+      {modalIsOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4">API Response</h2>
+            {waitingForApiResponse ? (
+              <p className="text-gray-600">Loading...</p>
+            ) : (
+              <>
+                <p className="text-gray-800 mb-4">{apiResponse}</p>
+                <button 
+                  onClick={closeModal}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Done
+                </button>
+              </>
+            )}
           </div>
         </div>
       )}
