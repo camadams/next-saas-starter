@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { Users, Settings, Shield, Activity, Menu, ChartBarIcon, CameraIcon } from 'lucide-react';
+import { Users, Settings, Shield, Activity, Menu, ChartBarIcon, CameraIcon, DollarSign} from 'lucide-react';
 
 export default function DashboardLayout({
   children,
@@ -21,6 +21,7 @@ export default function DashboardLayout({
     { href: '/dashboard/security', icon: Shield, label: 'Security' },
     { href: '/dashboard/charts', icon: ChartBarIcon, label: 'Charts' },
     { href: '/dashboard/capture', icon: CameraIcon, label: 'Capture' },
+    { href: '/dashboard/spendings', icon: DollarSign, label: 'Spendings' },
   ];
 
   return (

@@ -12,7 +12,7 @@ export async function llmWork(photo: string) {
     apiKey: process.env.ANTHROPIC_API_KEY,
   });
 
-  if (process.env.NODE_ENV == "development") {
+  if (false /*process.env.NODE_ENV == "development"*/) {
 
     photo = testPhoto;
   }
