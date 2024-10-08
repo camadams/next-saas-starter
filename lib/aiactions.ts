@@ -58,7 +58,7 @@ export async function llmWork(photo: string) {
   console.log({ parsedResponse });
   const newSpendingToAdd = {
     category: parsedResponse.category,
-    date: new Date(parsedResponse.date),
+    date: parsedResponse.date ? new Date(parsedResponse.date) : null,
     description: parsedResponse.description,
     price: parsedResponse.price,
   };

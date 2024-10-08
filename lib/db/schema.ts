@@ -72,7 +72,7 @@ export const invitations = pgTable('invitations', {
 
 export const spendingTable = pgTable("spending", {
   id: serial('id').primaryKey(),
-  date: timestamp("date", { mode: "date" }).notNull(),
+  date: timestamp("date", { mode: "date" }),
   description: text("description").notNull(),
   category: text("category"),
   price: real("price").notNull(),
