@@ -126,7 +126,7 @@ const CameraCapture = () => {
                     <h3 className="text-lg font-semibold mb-2">Spending Details:</h3>
                     <p><strong>Amount:</strong> {apiResponse.price}</p>
                     <p><strong>Category:</strong> {apiResponse.category}</p>
-                    <p><strong>Date:</strong> {apiResponse.date.toLocaleDateString()}</p>
+                    <p><strong>Date:</strong> {apiResponse.date?.toLocaleDateString() || "No date found"}</p>
                     <p><strong>Description:</strong> {apiResponse.description}</p>
                   </div>
                 ):( 
