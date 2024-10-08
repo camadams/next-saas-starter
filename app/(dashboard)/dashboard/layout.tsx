@@ -15,13 +15,14 @@ export default function DashboardLayout({
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const navItems = [
+    { href: '/dashboard/capture', icon: CameraIcon, label: 'Capture' },
+    { href: '/dashboard/charts', icon: ChartBarIcon, label: 'Charts' },
+    { href: '/dashboard/spendings', icon: DollarSign, label: 'Spendings' },
     { href: '/dashboard', icon: Users, label: 'Team' },
     { href: '/dashboard/general', icon: Settings, label: 'General' },
     { href: '/dashboard/activity', icon: Activity, label: 'Activity' },
     { href: '/dashboard/security', icon: Shield, label: 'Security' },
-    { href: '/dashboard/charts', icon: ChartBarIcon, label: 'Charts' },
-    { href: '/dashboard/capture', icon: CameraIcon, label: 'Capture' },
-    { href: '/dashboard/spendings', icon: DollarSign, label: 'Spendings' },
+
   ];
 
   return (

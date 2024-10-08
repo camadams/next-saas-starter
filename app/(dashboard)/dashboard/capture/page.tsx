@@ -2,12 +2,14 @@
 
 import { llmWork } from "@/lib/aiactions";
 import { useRef, useState, useEffect, ChangeEvent } from "react";
+import { CameraIcon } from "lucide-react";
 
 const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [photo, setPhoto] = useState<string | null>(null);
-  const [waitingForApiResponse, setWaitingForApiResponse] = useState<boolean>(false);
+  const [waitingForApiResponse, setWaitingForApiResponse] =
+    useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<string | null>(null);
 
@@ -57,34 +59,50 @@ const CameraCapture = () => {
   };
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center w-full gap-4">
       <div>
-        <input
-          type="file"
-          id="cameraInput"
-          accept="image/*"
-          capture="environment"
-          onChange={handleFileInputChange}
-        />{" "}
-        {/* <canvas
-          ref={canvasRef}
-          width="640"
-          height="480"
-          style={{ display: "none" }}
-        /> */}
-        <button onClick={handleSendClick} disabled={waitingForApiResponse}>
-          {waitingForApiResponse ? "Loading..." : "Send"}
-        </button>
+        <div className="flex items-center justify-center w-full">
+          <label className="flex flex-col items-center px-4 py-6 bg-white text-blue-500 rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue-500 hover:text-white">
+            <CameraIcon className="w-10 h-10" />
+            <span className="mt-2 text-base leading-normal">Capture</span>
+            <input
+              className="hidden"
+              type="file"
+              id="cameraInput"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileInputChange}
+            />
+          </label>
+        </div>
       </div>
-      
+
       {photo && (
-        <div>
+        <>
           <h3>Captured Photo:</h3>
-          <img src={photo} alt="Captured" style={{ maxWidth: '100%', height: 'auto' }} />
-          <button onClick={handleSendClick} disabled={waitingForApiResponse}>
+          <img
+            className="w-1/2"
+            src={photo}
+            alt="Captured"
+            // style={{ maxWidth: "100%", height: "auto" }}
+          />
+          <button
+            className={`
+              text-white font-bold py-2 px-4 rounded
+              transition-all duration-1000 ease-in-out
+              ${
+                waitingForApiResponse
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "bg-blue-500 hover:bg-blue-600 active:bg-blue-700 animate-pulse"
+              }
+            `}
+            onClick={handleSendClick}
+            disabled={waitingForApiResponse}
+          >
             {waitingForApiResponse ? "Loading..." : "Send"}
           </button>
-        </div>
+      
+        </>
       )}
 
       {modalIsOpen && (
@@ -96,7 +114,7 @@ const CameraCapture = () => {
             ) : (
               <>
                 <p className="text-gray-800 mb-4">{apiResponse}</p>
-                <button 
+                <button
                   onClick={closeModal}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
                 >

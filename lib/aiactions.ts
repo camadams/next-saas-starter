@@ -5,6 +5,7 @@ import { Spending, spendingTable } from "./db/schema";
 import { db } from "./db/drizzle";
 import { testPhoto } from "./testPhotoBase64String";
 import { getPrompt, typedData } from "./prompt";
+import { isDummyEnv } from "./utils";
 
 
 export async function llmWork(photo: string) {
@@ -12,7 +13,7 @@ export async function llmWork(photo: string) {
     apiKey: process.env.ANTHROPIC_API_KEY,
   });
 
-  if (false /*process.env.NODE_ENV == "development"*/) {
+  if (isDummyEnv()) {
     photo = testPhoto;
   }
 
@@ -20,7 +21,7 @@ export async function llmWork(photo: string) {
 
   let parsedResponse : Spending;
 
-  if (false) {
+  if (isDummyEnv()) {
     console.log("in dev mode so not doing claude api call")
     parsedResponse = typedData;
   }
@@ -49,7 +50,6 @@ export async function llmWork(photo: string) {
         },
       ],
     });
-    console.log({msg})
     const msgContent = msg.content[0] as ContentBlock & { content: string, text:string };
     console.log({msgContent})
     parsedResponse = JSON.parse(msgContent.text)
