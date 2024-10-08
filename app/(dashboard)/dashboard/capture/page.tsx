@@ -131,7 +131,7 @@ const CameraCapture = () => {
                   </div>
                 ):( 
                   <div className="mb-4">
-                    <h3 className="text-lg font-semibold mb-2">No spending details found. Try again maybe.</h3>
+                    <h3 className="text-lg font-semibold mb-2">No spending details found, try again maybe.</h3>
                     </div>
                 )}
 
