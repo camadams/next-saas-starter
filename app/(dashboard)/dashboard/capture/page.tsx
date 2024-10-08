@@ -3,6 +3,7 @@
 import { llmWork } from "@/lib/aiactions";
 import { useRef, useState, useEffect, ChangeEvent } from "react";
 import { CameraIcon } from "lucide-react";
+import { Spending } from "@/lib/db/schema";
 
 const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -11,7 +12,7 @@ const CameraCapture = () => {
   const [waitingForApiResponse, setWaitingForApiResponse] =
     useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
-  const [apiResponse, setApiResponse] = useState<string | null>(null);
+  const [apiResponse, setApiResponse] = useState<Spending | null>(null);
 
   useEffect(() => {
     navigator.mediaDevices
@@ -42,12 +43,12 @@ const CameraCapture = () => {
     setWaitingForApiResponse(true);
     setModalIsOpen(true);
     try {
-      const resp = await llmWork(photo!);
-      setApiResponse(JSON.stringify(resp));
+      const resp : Spending = await llmWork(photo!);
+      setApiResponse(resp);
       console.log(resp);
     } catch (error) {
       console.error("Error in API call:", error);
-      setApiResponse("An error occurred while processing the image.");
+      setApiResponse(null);
     } finally {
       setWaitingForApiResponse(false);
     }
@@ -108,12 +109,20 @@ const CameraCapture = () => {
       {modalIsOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full">
-            <h2 className="text-2xl font-bold mb-4">API Response</h2>
             {waitingForApiResponse ? (
               <p className="text-gray-600">Loading...</p>
             ) : (
               <>
-                <p className="text-gray-800 mb-4">{apiResponse}</p>
+                {apiResponse  && (
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold mb-2">Spending Details:</h3>
+                    <p><strong>Amount:</strong> {apiResponse.price}</p>
+                    <p><strong>Category:</strong> {apiResponse.category}</p>
+                    <p><strong>Date:</strong> {apiResponse.date.toLocaleDateString()}</p>
+                    <p><strong>Description:</strong> {apiResponse.description}</p>
+                  </div>
+                )}
+
                 <button
                   onClick={closeModal}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
