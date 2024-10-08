@@ -121,7 +121,7 @@ const CameraCapture = () => {
               <p className="text-gray-600">Loading...</p>
             ) : (
               <>
-                {apiResponse  && (
+                {apiResponse  ? (
                   <div className="mb-4">
                     <h3 className="text-lg font-semibold mb-2">Spending Details:</h3>
                     <p><strong>Amount:</strong> {apiResponse.price}</p>
@@ -129,6 +129,10 @@ const CameraCapture = () => {
                     <p><strong>Date:</strong> {apiResponse.date.toLocaleDateString()}</p>
                     <p><strong>Description:</strong> {apiResponse.description}</p>
                   </div>
+                ):( 
+                  <div className="mb-4">
+                    <h3 className="text-lg font-semibold mb-2">No spending details found. Try again maybe.</h3>
+                    </div>
                 )}
 
                 <div className="flex">
