@@ -2,7 +2,7 @@
 
 import { llmWork } from "@/lib/aiactions";
 import { useRef, useState, useEffect, ChangeEvent } from "react";
-import { CameraIcon } from "lucide-react";
+import { CameraIcon, Link } from "lucide-react";
 import { Spending } from "@/lib/db/schema";
 
 const CameraCapture = () => {
@@ -57,6 +57,7 @@ const CameraCapture = () => {
   const closeModal = () => {
     setModalIsOpen(false);
     setApiResponse(null);
+    setPhoto(null);
   };
 
   return (
@@ -129,6 +130,12 @@ const CameraCapture = () => {
                 >
                   Done
                 </button>
+                <Link
+                  href="/dashboard/spendings"
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                >
+                  Go to Spendings
+                </Link>
               </>
             )}
           </div>
