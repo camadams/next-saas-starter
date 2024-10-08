@@ -9,6 +9,8 @@ import { isDummyEnv } from "./utils";
 
 
 export async function llmWork(photo: string) {
+  console.log({here12: "inside llmWork function"})
+
   const anthropic = new Anthropic({
     apiKey: process.env.ANTHROPIC_API_KEY,
   });
@@ -17,7 +19,6 @@ export async function llmWork(photo: string) {
     photo = testPhoto;
   }
 
-  console.log({here20: "inside llmWork function"})
 
   photo = photo.split(",")[1];
 
