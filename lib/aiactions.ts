@@ -17,6 +17,8 @@ export async function llmWork(photo: string) {
     photo = testPhoto;
   }
 
+  console.log({here20: "inside llmWork function"})
+
   photo = photo.split(",")[1];
 
   let parsedResponse : Spending;
@@ -55,7 +57,6 @@ export async function llmWork(photo: string) {
     parsedResponse = JSON.parse(msgContent.text)
   }
 
-  console.log({ parsedResponse });
   const newSpendingToAdd = {
     category: parsedResponse.category,
     date: parsedResponse.date ? new Date(parsedResponse.date) : null,
@@ -64,6 +65,8 @@ export async function llmWork(photo: string) {
   };
   // alert(parsedResponse);
   //upload to db
+  console.log({ newSpendingToAdd });
+  
   const [result] = await db.insert(spendingTable).values(newSpendingToAdd).returning();
   console.log("done uploading to db");
   return result;
