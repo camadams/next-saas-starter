@@ -4,6 +4,7 @@ import { llmWork } from "@/lib/aiactions";
 import { useRef, useState, useEffect, ChangeEvent } from "react";
 import { CameraIcon, Link } from "lucide-react";
 import { Spending } from "@/lib/db/schema";
+import { useRouter } from "next/navigation";
 
 const CameraCapture = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -13,6 +14,7 @@ const CameraCapture = () => {
     useState<boolean>(false);
   const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
   const [apiResponse, setApiResponse] = useState<Spending | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -58,6 +60,11 @@ const CameraCapture = () => {
     setModalIsOpen(false);
     setApiResponse(null);
     setPhoto(null);
+  };
+
+  const goToSpendings = () => {
+    closeModal();
+    router.push("/dashboard/spendings");
   };
 
   return (
@@ -124,18 +131,20 @@ const CameraCapture = () => {
                   </div>
                 )}
 
-                <button
-                  onClick={closeModal}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                >
-                  Done
-                </button>
-                <Link
-                  href="/dashboard/spendings"
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                >
-                  Go to Spendings
-                </Link>
+                <div className="flex">
+                  <button
+                    onClick={closeModal}
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Done
+                  </button>
+                  <button
+                    onClick={goToSpendings}
+                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Go to Spendings
+                  </button>
+                </div>
               </>
             )}
           </div>
