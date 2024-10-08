@@ -40,7 +40,7 @@ export default async function CategoryPage() {
         <tbody>
           {spendings.map((spending, index) => (
             <tr key={index} className={index % 2 === 0 ? 'bg-gray-50' : 'bg-white'}>
-              <td className="px-2 py-2 text-xs sm:text-sm md:text-base">{spending.date.toLocaleDateString()}</td>
+              <td className="px-2 py-2 text-xs sm:text-sm md:text-base">{spending.date?.toLocaleDateString() || "No date found"}</td>
               <td className="px-2 py-2 text-xs sm:text-sm md:text-base">{spending.description}</td>
               <td className="px-2 py-2 text-right text-xs sm:text-sm md:text-base">{spending.price}</td>
               <td className="px-2 py-2">
